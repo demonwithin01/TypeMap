@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TypeMapper;
 
 namespace TypeMapUnitTests.TestObjects
 {
@@ -17,6 +18,11 @@ namespace TypeMapUnitTests.TestObjects
             this.MappedDouble = 6.95d;
             this.MappedFloat = 7.42f;
             this.MappedDecimal = 9.42m;
+
+            this.MappedToDifferentName = "Mapped to a different name";
+            this.NotMapped = "Not mapped";
+            this.NotMappedDueToTypeDifference = "Not mapped due to type difference";
+            this.NullNotMapped = null;
         }
 
         public int MappedInt { get; set; }
@@ -32,5 +38,17 @@ namespace TypeMapUnitTests.TestObjects
         public float MappedFloat { get; set; }
 
         public decimal MappedDecimal { get; set; }
+
+        [TypeMapDestination( "DifferentNameMapping" )]
+        public string MappedToDifferentName { get; set; }
+
+        [TypeMapDestination( Ignore = true )]
+        public string NotMapped { get; set; }
+
+        [TypeMapDestination( typeof( TestClass1 ) )]
+        public string NotMappedDueToTypeDifference { get; set; }
+
+        [TypeMapDestination( MapIfSourceIsNull = false )]
+        public string NullNotMapped { get; set; }
     }
 }

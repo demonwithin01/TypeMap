@@ -17,6 +17,11 @@ namespace TypeMapUnitTests.TestObjects
             this.MappedDouble = 4.73d;
             this.MappedFloat = 1.14f;
             this.MappedDecimal = 2.53m;
+
+            this.DifferentNameMapping = "I have been written over";
+            this.NotMapped = "I have not been mapped";
+            this.NotMappedDueToTypeDifference = "Already has value";
+            this.NullNotMapped = "Null not mapped";
         }
 
         public int MappedInt { get; set; }
@@ -32,5 +37,13 @@ namespace TypeMapUnitTests.TestObjects
         public float MappedFloat { get; set; }
 
         public decimal MappedDecimal { get; set; }
+
+        public string DifferentNameMapping { get; set; }
+
+        public string NotMapped { get; set; }
+
+        public string NotMappedDueToTypeDifference { get; set; }
+
+        public string NullNotMapped { get; set; }
     }
 }

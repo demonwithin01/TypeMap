@@ -9,7 +9,7 @@ namespace TypeMapUnitTests
     public class UnitTests
     {
         [TestMethod]
-        public void NormapMap()
+        public void NormalMap()
         {
             TestClass1 source = new TestClass1();
             TestClass2 destination = new TestClass2();
@@ -23,6 +23,11 @@ namespace TypeMapUnitTests
             Assert.AreEqual( 6.95d, destination.MappedDouble );
             Assert.AreEqual( 7.42f, destination.MappedFloat );
             Assert.AreEqual( 9.42m, destination.MappedDecimal );
+
+            Assert.AreEqual( "Mapped to a different name", destination.DifferentNameMapping );
+            Assert.AreEqual( "I have not been mapped", destination.NotMapped );
+            Assert.AreEqual( "Already has value", destination.NotMappedDueToTypeDifference );
+            Assert.AreEqual( "Null not mapped", destination.NullNotMapped );
         }
     }
 }

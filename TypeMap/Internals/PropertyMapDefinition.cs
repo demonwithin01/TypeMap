@@ -9,14 +9,22 @@ namespace TypeMapper
     internal class PropertyMapDefinition
     {
         /// <summary>
+        /// Whether or not to allow NULL values to be mapped.
+        /// </summary>
+        private bool _allowNullMapping;
+
+        /// <summary>
         /// Creates a property map definition.
         /// </summary>
         /// <param name="sourceProperty">The property info for the source object.</param>
         /// <param name="destinationProperty">The property info for the destination object.</param>
-        internal PropertyMapDefinition( PropertyInfo sourceProperty, PropertyInfo destinationProperty )
+        /// <param name="allowNullMapping">Whether or not to allow NULL values to be mapped.</param>
+        internal PropertyMapDefinition( PropertyInfo sourceProperty, PropertyInfo destinationProperty, bool allowNullMapping )
         {
             this.SourceProperty = sourceProperty;
             this.DestinationProperty = destinationProperty;
+
+            this._allowNullMapping = allowNullMapping;
         }
 
         /// <summary>
@@ -27,6 +35,8 @@ namespace TypeMapper
         internal virtual void Map( object source, object destination )
         {
             var value = this.SourceProperty.GetValue( source );
+
+            if ( value == null && this._allowNullMapping == false ) return;
 
             this.DestinationProperty.SetValue( destination, value );
         }

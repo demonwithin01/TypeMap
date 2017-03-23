@@ -35,11 +35,29 @@ namespace TypeMapper
             {
                 if ( sourceProperty.GetMethod == null ) continue;
 
-                PropertyInfo destinationProperty = destinationProperties.FirstOrDefault( s => s.Name == sourceProperty.Name );
+                TypeMapDestinationAttribute destinationAttribute = sourceProperty.GetCustomAttribute<TypeMapDestinationAttribute>();
+
+                if ( destinationAttribute == null )
+                {
+                    destinationAttribute = new TypeMapDestinationAttribute( sourceProperty.Name );
+                }
+
+                if ( string.IsNullOrEmpty( destinationAttribute.Name ) )
+                {
+                    destinationAttribute.Name = sourceProperty.Name;
+                }
+
+                if ( destinationAttribute.Ignore ) continue;
+
+                if ( destinationAttribute.Type != null && destinationAttribute.Type != destinationType ) continue;
+
+                PropertyInfo destinationProperty = destinationProperties.FirstOrDefault( s => s.Name == destinationAttribute.Name );
 
                 if ( destinationProperty == null ) continue;
 
-                this._propertyMappings.Add( new PropertyMapDefinition( sourceProperty, destinationProperty ) );
+                if ( destinationProperty.SetMethod == null ) continue;
+
+                this._propertyMappings.Add( new PropertyMapDefinition( sourceProperty, destinationProperty, destinationAttribute.MapIfSourceIsNull ) );
             }
         }
 
@@ -55,20 +73,7 @@ namespace TypeMapper
                 mapping.Map( source, destination );
             }
         }
-
-        /// <summary>
-        /// Performs a normal map where the value on the source object is mapped directly over to the destination object.
-        /// </summary>
-        /// <param name="propertyMap">The property map definition for the property info.</param>
-        /// <param name="source">The source object.</param>
-        /// <param name="destination">The destination object.</param>
-        private void NormalMap( PropertyMapDefinition propertyMap, object source, object destination )
-        {
-            var value = propertyMap.SourceProperty.GetValue( source );
-
-            propertyMap.DestinationProperty.SetValue( destination, value );
-        }
-
+        
         /// <summary>
         /// Gets the source type.
         /// </summary>
