@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMap", "TypeMap.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMapUnitTests", "..\TypeMapUnitTests\TypeMapUnitTests.csproj", "{4C8DB8EF-91D4-4D99-A55B-D7576EB3D7CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadTests", "..\LoadTests\LoadTests.csproj", "{CC887354-6439-4BFB-991D-B4EDECF8CBB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceTests", "..\LoadTests\PerformanceTests.csproj", "{CC887354-6439-4BFB-991D-B4EDECF8CBB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

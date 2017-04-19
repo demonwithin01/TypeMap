@@ -39,7 +39,7 @@ namespace LoadTests
                 AutoMapper.Mapper.Map( source, destination );
             }
 
-            Console.WriteLine( "Auto Mapping Load: " + stopwatch.Elapsed.ToString() );
+            Console.WriteLine( "Auto Mapping Load Current: " + stopwatch.Elapsed.ToString() );
         }
 
         private static void PerformAutoMapperLoadTest2()
@@ -56,7 +56,7 @@ namespace LoadTests
                 AutoMapper.Mapper.Map( source, destination );
             }
             
-            Console.WriteLine( "Auto Mapping Load: " + stopwatch.Elapsed.ToString() );
+            Console.WriteLine( "Auto Mapping Load Correct: " + stopwatch.Elapsed.ToString() );
         }
 
         private static void PerformTypeMapLoadTest()
