@@ -23,6 +23,9 @@ namespace TypeMapUnitTests.TestObjects
             this.NotMapped = "Not mapped";
             this.NotMappedDueToTypeDifference = "Not mapped due to type difference";
             this.NullNotMapped = null;
+
+            this.TestClass = new TestClass3();
+            this.TestClass.TestString = "I have a value";
         }
 
         public int MappedInt { get; set; }
@@ -50,5 +53,7 @@ namespace TypeMapUnitTests.TestObjects
 
         [TypeMapDestination( MapIfSourceIsNull = false )]
         public string NullNotMapped { get; set; }
+
+        public TestClass3 TestClass { get; set; }
     }
 }

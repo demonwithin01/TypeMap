@@ -43,6 +43,7 @@
     <Compile Include="Attributes\TypeMapDestination.cs" />
     <Compile Include="Attributes\TypeMapIgnore.cs" />
     <Compile Include="Internals\PropertyMapDefinition.cs" />
+    <Compile Include="Internals\PropertyTypeMapDefinition.cs" />
     <Compile Include="Internals\TypeMapDefinition.cs" />
     <Compile Include="Internals\TypeMapDefinitionKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

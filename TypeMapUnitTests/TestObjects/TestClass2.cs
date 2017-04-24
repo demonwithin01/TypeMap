@@ -45,5 +45,7 @@ namespace TypeMapUnitTests.TestObjects
         public string NotMappedDueToTypeDifference { get; set; }
 
         public string NullNotMapped { get; set; }
+
+        public TestClass3 TestClass { get; set; }
     }
 }

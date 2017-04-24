@@ -8,10 +8,6 @@ namespace TypeMapper
     /// </summary>
     internal class PropertyMapDefinition
     {
-        /// <summary>
-        /// Whether or not to allow NULL values to be mapped.
-        /// </summary>
-        private bool _allowNullMapping;
 
         /// <summary>
         /// Creates a property map definition.
@@ -24,7 +20,7 @@ namespace TypeMapper
             this.SourceProperty = sourceProperty;
             this.DestinationProperty = destinationProperty;
 
-            this._allowNullMapping = allowNullMapping;
+            this.AllowNullMapping = allowNullMapping;
         }
 
         /// <summary>
@@ -36,7 +32,7 @@ namespace TypeMapper
         {
             var value = this.SourceProperty.GetValue( source );
 
-            if ( value == null && this._allowNullMapping == false ) return;
+            if ( value == null && this.AllowNullMapping == false ) return;
 
             this.DestinationProperty.SetValue( destination, value );
         }
@@ -50,5 +46,10 @@ namespace TypeMapper
         /// Gets the destination property information.
         /// </summary>
         internal PropertyInfo DestinationProperty { get; private set; }
+
+        /// <summary>
+        /// Whether or not to allow NULL values to be mapped.
+        /// </summary>
+        internal bool AllowNullMapping { get; private set; }
     }
 }

@@ -28,6 +28,9 @@ namespace TypeMapUnitTests
             Assert.AreEqual( "I have not been mapped", destination.NotMapped );
             Assert.AreEqual( "Already has value", destination.NotMappedDueToTypeDifference );
             Assert.AreEqual( "Null not mapped", destination.NullNotMapped );
+
+            Assert.IsNotNull( destination.TestClass );
+            Assert.AreEqual( "I have a value", destination.TestClass.TestString );
         }
     }
 }

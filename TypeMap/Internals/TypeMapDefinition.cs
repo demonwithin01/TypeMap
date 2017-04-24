@@ -57,7 +57,14 @@ namespace TypeMapper
 
                 if ( destinationProperty.SetMethod == null ) continue;
 
-                this._propertyMappings.Add( new PropertyMapDefinition( sourceProperty, destinationProperty, destinationAttribute.MapIfSourceIsNull ) );
+                if( ( destinationProperty.PropertyType.IsClass || sourceProperty.PropertyType.IsClass ) && destinationProperty.PropertyType.GetConstructor( Type.EmptyTypes ) != null )
+                {
+                    this._propertyMappings.Add( new PropertyTypeMapDefinition( new TypeMapDefinition( sourceProperty.PropertyType, destinationProperty.PropertyType ), sourceProperty, destinationProperty, destinationAttribute.MapIfSourceIsNull ) );
+                }
+                else
+                {
+                    this._propertyMappings.Add( new PropertyMapDefinition( sourceProperty, destinationProperty, destinationAttribute.MapIfSourceIsNull ) );
+                }
             }
         }
 
