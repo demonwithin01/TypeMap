@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace TypeMapper
@@ -8,6 +9,15 @@ namespace TypeMapper
     /// </summary>
     internal class PropertyMapDefinition
     {
+        /// <summary>
+        /// The delegate that holds the definition for retrieving the value the property.
+        /// </summary>
+        private Delegate _sourceGet;
+
+        /// <summary>
+        /// The delegate that holds the definition for setting the value of the property.
+        /// </summary>
+        private Delegate _destinationSet;
 
         /// <summary>
         /// Creates a property map definition.
@@ -20,6 +30,21 @@ namespace TypeMapper
             this.SourceProperty = sourceProperty;
             this.DestinationProperty = destinationProperty;
 
+            var sParameter = Expression.Parameter( sourceProperty.DeclaringType );
+            var sProperty = Expression.Property( sParameter, sourceProperty );
+            var sConversion = Expression.Convert( sProperty, sourceProperty.PropertyType );
+            var sLambda = Expression.Lambda( sConversion, sParameter );
+            this._sourceGet = sLambda.Compile();
+
+            var dParameter = Expression.Parameter( destinationProperty.DeclaringType );
+            var dSetParameter = Expression.Parameter( destinationProperty.PropertyType );
+            var dProperty = Expression.Property( dParameter, destinationProperty );
+            var dConversion = Expression.Convert( dProperty, destinationProperty.PropertyType );
+            var dAssign = Expression.Assign( dProperty, dSetParameter );
+            
+            var dLambda = Expression.Lambda( dAssign, dParameter, dSetParameter );
+            this._destinationSet = dLambda.Compile();
+
             this.AllowNullMapping = allowNullMapping;
         }
 
@@ -30,11 +55,17 @@ namespace TypeMapper
         /// <param name="destination">The destination object.</param>
         internal virtual void Map( object source, object destination )
         {
-            var value = this.SourceProperty.GetValue( source );
+            var value2 = this._sourceGet.DynamicInvoke( source );
 
-            if ( value == null && this.AllowNullMapping == false ) return;
+            if( value2 == null && this.AllowNullMapping == false ) return;
 
-            this.DestinationProperty.SetValue( destination, value );
+            this._destinationSet.DynamicInvoke( destination, value2 );
+
+            //var value = this.SourceProperty.GetValue( source );
+
+            //if ( value == null && this.AllowNullMapping == false ) return;
+
+            //this.DestinationProperty.SetValue( destination, value );
         }
 
         /// <summary>

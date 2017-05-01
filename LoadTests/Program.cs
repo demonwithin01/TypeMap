@@ -18,7 +18,7 @@ namespace LoadTests
             PerformTypeMapTimeTest();
             PerformCopyTimeTest();
 
-            PerformAutoMapperLoadTest1();
+            //PerformAutoMapperLoadTest1();
             PerformAutoMapperLoadTest2();
             PerformTypeMapLoadTest();
             PerformCopyLoadTest();
