@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace TypeMapper
 {
@@ -10,14 +11,14 @@ namespace TypeMapper
     internal class PropertyMapDefinition
     {
         /// <summary>
-        /// The delegate that holds the definition for retrieving the value the property.
+        /// The get method for retrieving the value of the property from the source object.
         /// </summary>
-        private Delegate _sourceGet;
+        private MethodBase _sourceGetMethod;
 
         /// <summary>
-        /// The delegate that holds the definition for setting the value of the property.
+        /// The set method for assigning the value of the property to the destination object.
         /// </summary>
-        private Delegate _destinationSet;
+        private MethodBase _destinationSetMethod;
 
         /// <summary>
         /// Creates a property map definition.
@@ -29,22 +30,10 @@ namespace TypeMapper
         {
             this.SourceProperty = sourceProperty;
             this.DestinationProperty = destinationProperty;
-
-            var sParameter = Expression.Parameter( sourceProperty.DeclaringType );
-            var sProperty = Expression.Property( sParameter, sourceProperty );
-            var sConversion = Expression.Convert( sProperty, sourceProperty.PropertyType );
-            var sLambda = Expression.Lambda( sConversion, sParameter );
-            this._sourceGet = sLambda.Compile();
-
-            var dParameter = Expression.Parameter( destinationProperty.DeclaringType );
-            var dSetParameter = Expression.Parameter( destinationProperty.PropertyType );
-            var dProperty = Expression.Property( dParameter, destinationProperty );
-            var dConversion = Expression.Convert( dProperty, destinationProperty.PropertyType );
-            var dAssign = Expression.Assign( dProperty, dSetParameter );
             
-            var dLambda = Expression.Lambda( dAssign, dParameter, dSetParameter );
-            this._destinationSet = dLambda.Compile();
-
+            this._sourceGetMethod = this.SourceProperty.GetMethod;
+            this._destinationSetMethod = this.DestinationProperty.SetMethod;
+            
             this.AllowNullMapping = allowNullMapping;
         }
 
@@ -55,17 +44,11 @@ namespace TypeMapper
         /// <param name="destination">The destination object.</param>
         internal virtual void Map( object source, object destination )
         {
-            var value2 = this._sourceGet.DynamicInvoke( source );
+            var sourceValue = this._sourceGetMethod.Invoke( source, null );
 
-            if( value2 == null && this.AllowNullMapping == false ) return;
+            if ( sourceValue == null && this.AllowNullMapping == false ) return;
 
-            this._destinationSet.DynamicInvoke( destination, value2 );
-
-            //var value = this.SourceProperty.GetValue( source );
-
-            //if ( value == null && this.AllowNullMapping == false ) return;
-
-            //this.DestinationProperty.SetValue( destination, value );
+            this._destinationSetMethod.Invoke( destination, new object[] { sourceValue } );
         }
 
         /// <summary>
